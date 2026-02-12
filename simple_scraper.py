@@ -2,13 +2,16 @@ from colorama import Fore
 import discord
 import os
 from discord.ext import commands
+from dotenv import load_dotenv
+
+load_dotenv()
 
 TOKEN = os.getenv("DISCORD_TOKEN")
 SERVER_ID = 799672011265015819
 CHANNEL_ID = 1189589759065067580
 
 if not TOKEN:
-    print(f"{Fore.WHITE}[ {Fore.RED}E {Fore.WHITE}] {Fore.LIGHTBLACK_EX}DISCORD_TOKEN environment variable is not set\n\n"+Fore.RESET)
+    print(f"{Fore.WHITE}[ {Fore.RED}E {Fore.WHITE}] {Fore.LIGHTBLACK_EX}DISCORD_TOKEN not found. Set it in .env file or environment variable\n\n"+Fore.RESET)
     exit(1)
 
 intents = discord.Intents.default()
