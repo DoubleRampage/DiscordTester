@@ -1,7 +1,6 @@
 from colorama import Fore
 import discord
 import os
-from discord.ext import commands
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -17,14 +16,7 @@ if not TOKEN:
     print(f"{Fore.WHITE}[ {Fore.RED}E {Fore.WHITE}] {Fore.LIGHTBLACK_EX}DISCORD_TOKEN not found. Set it in .env file or environment variable\n\n"+Fore.RESET)
     exit(1)
 
-intents = discord.Intents.default()
-intents.message_content = True
-
-client = commands.Bot(
-    command_prefix="!",
-    self_bot=True,
-    intents=intents
-)
+client = discord.Client()
 
 @client.event
 async def on_ready():
@@ -67,7 +59,7 @@ async def on_ready():
     await client.close()
 
 try:
-    client.run(TOKEN, reconnect=True)
+    client.run(TOKEN, bot=False, reconnect=True)
 except discord.errors.LoginFailure as e:
     print(f"\n\n{Fore.WHITE}[ {Fore.RED}E {Fore.WHITE}] {Fore.LIGHTBLACK_EX}Token is invalid or expired. Please check your .env file.\n")
     print(f"{Fore.WHITE}[ {Fore.YELLOW}? {Fore.WHITE}] {Fore.LIGHTBLACK_EX}Make sure your .env file contains: DISCORD_TOKEN=your_token_here\n")
