@@ -21,42 +21,25 @@ client = discord.Client()
 @client.event
 async def on_ready():
     print(f"{Fore.WHITE}[ {Fore.GREEN}+ {Fore.WHITE}] {Fore.LIGHTBLACK_EX}Logged in as {Fore.WHITE}{client.user}")
-    
-    guild = client.get_guild(SERVER_ID)
-    if not guild:
-        print(f"{Fore.WHITE}[ {Fore.RED}E {Fore.WHITE}] {Fore.LIGHTBLACK_EX}Server {SERVER_ID} not found")
-        await client.close()
+    print(f"{Fore.WHITE}[ {Fore.GREEN}+ {Fore.WHITE}] {Fore.LIGHTBLACK_EX}Monitoring for new messages...\n")
+
+@client.event
+async def on_message(message):
+    if message.author.bot:
         return
     
-    channel = guild.get_channel(CHANNEL_ID)
-    if not channel:
-        print(f"{Fore.WHITE}[ {Fore.RED}E {Fore.WHITE}] {Fore.LIGHTBLACK_EX}Channel {CHANNEL_ID} not found")
-        await client.close()
-        return
+    channel_name = message.channel.name if hasattr(message.channel, 'name') else 'DM'
+    server_name = message.guild.name if message.guild else 'Direct Message'
     
-    print(f"{Fore.WHITE}[ {Fore.YELLOW}? {Fore.WHITE}] {Fore.LIGHTBLACK_EX}Fetching last 10 messages from {Fore.WHITE}#{channel.name}{Fore.LIGHTBLACK_EX}...\n")
+    attachments = [attachment.url for attachment in message.attachments] if message.attachments else []
     
-    messages = []
-    try:
-        async for message in channel.history(limit=10):
-            messages.append(message)
-    except Exception as e:
-        print(f"{Fore.WHITE}[ {Fore.RED}E {Fore.WHITE}] {Fore.LIGHTBLACK_EX}Error fetching messages: {Fore.WHITE}{e}")
-        await client.close()
-        return
-    
-    for msg in reversed(messages):
-        attachments = [attachment.url for attachment in msg.attachments if msg.attachments]
-        try:
-            if attachments:
-                print(f"{Fore.WHITE}[{msg.created_at}] {Fore.CYAN}{msg.author}{Fore.RESET}: {msg.content} {Fore.LIGHTBLACK_EX}({attachments[0]}){Fore.RESET}")
-            else:
-                print(f"{Fore.WHITE}[{msg.created_at}] {Fore.CYAN}{msg.author}{Fore.RESET}: {msg.content}")
-        except Exception as e:
-            print(f"{Fore.WHITE}[ {Fore.RED}- {Fore.WHITE}] {Fore.LIGHTBLACK_EX}Cannot display message from {Fore.WHITE}{msg.author}")
-    
-    print(f"\n{Fore.WHITE}[ {Fore.GREEN}+ {Fore.WHITE}] {Fore.LIGHTBLACK_EX}Successfully scraped {Fore.WHITE}{len(messages)} {Fore.LIGHTBLACK_EX}messages!\n")
-    await client.close()
+    print(f"{Fore.WHITE}[{message.created_at.strftime('%Y-%m-%d %H:%M:%S')}]")
+    print(f"  {Fore.CYAN}Channel{Fore.RESET}: {Fore.YELLOW}#{channel_name}{Fore.RESET} ({Fore.LIGHTBLACK_EX}{server_name}{Fore.RESET})")
+    print(f"  {Fore.CYAN}From{Fore.RESET}: {Fore.GREEN}{message.author}{Fore.RESET}")
+    print(f"  {Fore.CYAN}Content{Fore.RESET}: {message.content if message.content else '(empty)'}")
+    if attachments:
+        print(f"  {Fore.CYAN}Attachments{Fore.RESET}: {Fore.LIGHTBLACK_EX}{', '.join(attachments)}{Fore.RESET}")
+    print()
 
 try:
     client.run(TOKEN, reconnect=True)
