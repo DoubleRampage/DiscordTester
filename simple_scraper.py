@@ -59,7 +59,7 @@ async def on_ready():
     await client.close()
 
 try:
-    client.run(TOKEN, bot=False, reconnect=True)
+    client.run(TOKEN, reconnect=True)
 except discord.errors.LoginFailure as e:
     print(f"\n\n{Fore.WHITE}[ {Fore.RED}E {Fore.WHITE}] {Fore.LIGHTBLACK_EX}Token is invalid or expired. Please check your .env file.\n")
     print(f"{Fore.WHITE}[ {Fore.YELLOW}? {Fore.WHITE}] {Fore.LIGHTBLACK_EX}Make sure your .env file contains: DISCORD_TOKEN=your_token_here\n")
