@@ -7,6 +7,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 TOKEN = os.getenv("DISCORD_TOKEN")
+if TOKEN:
+    TOKEN = TOKEN.strip()
+
 SERVER_ID = 799672011265015819
 CHANNEL_ID = 1189589759065067580
 
@@ -65,8 +68,10 @@ async def on_ready():
 
 try:
     client.run(TOKEN, reconnect=True)
-except discord.errors.LoginFailure:
-    print(f"\n\n{Fore.WHITE}[ {Fore.RED}E {Fore.WHITE}] {Fore.LIGHTBLACK_EX}Token is invalid\n\n"+Fore.RESET)
+except discord.errors.LoginFailure as e:
+    print(f"\n\n{Fore.WHITE}[ {Fore.RED}E {Fore.WHITE}] {Fore.LIGHTBLACK_EX}Token is invalid or expired. Please check your .env file.\n")
+    print(f"{Fore.WHITE}[ {Fore.YELLOW}? {Fore.WHITE}] {Fore.LIGHTBLACK_EX}Make sure your .env file contains: DISCORD_TOKEN=your_token_here\n")
+    print(f"{Fore.WHITE}[ {Fore.YELLOW}? {Fore.WHITE}] {Fore.LIGHTBLACK_EX}Error details: {Fore.WHITE}{e}\n\n"+Fore.RESET)
 except Exception as e:
     print(f"\n\n{Fore.WHITE}[ {Fore.RED}E {Fore.WHITE}] {Fore.LIGHTBLACK_EX}Error: {Fore.WHITE}{e}\n\n"+Fore.RESET)
 
