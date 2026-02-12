@@ -50,3 +50,4 @@ except discord.errors.LoginFailure as e:
 except Exception as e:
     print(f"\n\n{Fore.WHITE}[ {Fore.RED}E {Fore.WHITE}] {Fore.LIGHTBLACK_EX}Error: {Fore.WHITE}{e}\n\n"+Fore.RESET)
 
+print("New commit")
